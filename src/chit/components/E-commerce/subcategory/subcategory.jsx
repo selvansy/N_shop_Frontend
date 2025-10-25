@@ -31,7 +31,7 @@ import ModelOne from "../../common/Modelone";
 import ActiveDropdown from "../../common/ActiveDropdown";
 import plus from "../../../../assets/plus.svg";
 import { head, header } from "framer-motion/client";
-import Addsubcategory from "./addsubcategory";
+import Addsubcategory from "./Addsubcategory";
 
 
 const SubCategory = () => {
