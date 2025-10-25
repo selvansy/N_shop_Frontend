@@ -3,8 +3,8 @@ import { useMutation } from "@tanstack/react-query";
 import { formatDecimal, formatNumber } from "../../../utils/commonFunction";
 import Delivery from "../../../../assets/Delivery.svg";
 import Pending from "../../../../assets/Pending.svg";
-import Order from "../../../../assets/Order.svg";
-import Shipment from "../../../../assets/Shipment.svg";
+import Order from "../../../../assets/order.svg";
+import Shipment from "../../../../assets/shipment.svg";
 import { getOrderOverAll, getOverAllDashboard } from "../../../api/Endpoints";
 
 function HeaderEcom({ id_branch, dateFilter }) {
