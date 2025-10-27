@@ -8,6 +8,7 @@ import {
   getproductTable,
   deleteproduct,
   activateproduct,
+  toggleBestSeller,
 } from "../../../api/Endpoints";
 
 import { eventEmitter } from "../../../../utils/EventEmitter";
@@ -20,7 +21,6 @@ import Action from "../../common/action";
 import { Breadcrumb } from "../../common/breadCumbs/breadCumbs";
 import ActiveDropdown from "../../common/ActiveDropdown";
 import plus from "../../../../assets/plus.svg";
-import { formatDate } from "../../../../utils/FormatDate";
 
 const Product = () => {
   const navigate = useNavigate();
@@ -44,6 +44,7 @@ const Product = () => {
   const [totalDocuments, setTotalDocuments] = useState(0);
   const [activeFilter, setActiveFilter] = useState(null);
 
+  console.log("wertyuiop",productData)
   //mutation to get getproductData
   const { mutate: getproductData } = useMutation({
     mutationFn: (payload) => getproductTable(payload),
@@ -88,6 +89,18 @@ const Product = () => {
       setproductData((prev) =>
         prev.map((cat) =>
           cat._id === id ? { ...cat, active: !cat.active } : cat
+        )
+      );
+      toast.success(response.message);
+    }
+  };
+
+  const toggleBestSellerChanged = async (id) => {
+    let response = await toggleBestSeller(id);
+    if (response) {
+      setproductData((prev) =>
+        prev.map((cat) =>
+          cat._id === id ? { ...cat, bestSeller: !cat.bestSeller } : cat
         )
       );
       toast.success(response.message);
@@ -176,10 +189,7 @@ const Product = () => {
       header: "Weight",
       cell: (row) => row?.weight,
     },
-    {
-      header: "Branch",
-      cell: (row) => row?.branchName,
-    },
+    
     {
       header: "Image",
       cell: (row) => (
@@ -194,11 +204,10 @@ const Product = () => {
     },
     {
       header: "Create Date",
-      // cell: (row) => {
-      //   const date = new Date(row?.createdAt);
-      //   return date.toLocaleDateString("en-GB");
-      // },
-      cell:(row)=>formatDate(row?.createdAt)
+      cell: (row) => {
+        const date = new Date(row?.createdAt);
+        return date.toLocaleDateString("en-GB");
+      },
     },
 
     {
@@ -221,6 +230,32 @@ const Product = () => {
           ></div>
         </label>
       ),
+    },
+    {
+      header: "Best Seller",
+      accessor: "bestSeller",
+      cell: (row) => (
+        <label className="relative inline-flex items-center cursor-pointer">
+          <div>{console.log(row,"kdkd")}</div>
+          <input
+            type="checkbox"
+            className="sr-only peer"
+            checked={row?.bestSeller === true}
+            onChange={() => toggleBestSellerChanged(row?._id)}
+          />
+          <div
+            className={`z-0 group peer bg-white rounded-full duration-300 w-8 h-4 ring-1 ring-[#E7EEF5] p-[2px] after:duration-300 after:bg-[#004181] ${
+              row?.bestSeller === true
+                ? "peer-checked:bg-[#E7EEF5] peer-checked:ring-[#E7EEF5]"
+                : "peer-checked:bg-[#E7EEF5] peer-checked:ring-gray-400"
+            } after:rounded-full after:absolute after:h-3 after:w-3 after:top-[2px] after:left-[2px] after:flex after:justify-center after:items-center peer-checked:after:translate-x-4 peer-checked:after:bg-[${layout_color}] peer-hover:after:scale-95`}
+          ></div>
+        </label>
+      ),
+    },
+    {
+      header: "Branch",
+      cell: (row) => row?.branchName,
     },
     {
       header: "Actions",
