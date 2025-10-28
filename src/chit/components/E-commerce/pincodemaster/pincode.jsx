@@ -258,7 +258,8 @@ const Pincodemaster = () => {
     },
     {
       header:"Delivery Charge",
-      cell: (row) => `₹${row.deliveryRate}` || "N/A",
+      // cell: (row) => `₹${row.deliveryRate}` || "N/A",
+      cell: (row) => row?.deliveryRate != null ? `₹${row?.deliveryRate}` : "-",
     },
     {
       header: "Active",
