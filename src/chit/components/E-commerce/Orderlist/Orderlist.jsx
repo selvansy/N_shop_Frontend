@@ -572,22 +572,58 @@ function Orderlist() {
       header: "Price",
       cell: (row) => row?.totalAmount !== undefined ? Number(row.totalAmount).toFixed(3) : "",
     },
+    // {
+    //   header: "Status",
+    //   cell: (row) => (
+    //     <button
+    //       className={`px-4 py-1 rounded-lg font-medium text-sm transition border ${
+    //         row.status
+    //           ? "border-blue-400 text-blue-500 bg-blue-50 cursor-default"
+    //           : "border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
+    //       }`}
+    //       disabled={row.status && ["Delivered", "Cancelled"].includes(row.status)}
+    //       onClick={() => openModal("isViewStatus", row._id, row.status)}
+    //     >
+    //       {row.status ? row.status : "Set"}
+    //     </button>
+    //   ),
+    // },
     {
-      header: "Status",
-      cell: (row) => (
-        <button
-          className={`px-4 py-1 rounded-lg font-medium text-sm transition border ${
-            row.status
-              ? "border-blue-400 text-blue-500 bg-blue-50 cursor-default"
-              : "border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
-          }`}
-          disabled={row.status && ["Delivered", "Cancelled"].includes(row.status)}
-          onClick={() => openModal("isViewStatus", row._id, row.status)}
-        >
-          {row.status ? row.status : "Set"}
-        </button>
-      ),
-    },
+  header: "Status",
+  cell: (row) => {
+    const getStatusStyles = (status) => {
+      switch(status) {
+        case "Delivered":
+          return " text-[#12B76A] bg-[#12B76A38]";
+        case "Shipped":
+          return " text-[#FDA700] bg-[#FDA70038]";
+        case "Cancelled":
+          return "text-[#FF0000] bg-[#FF000038]";
+        case "Placed":
+          return "text-[#118D6E] bg-[#118D6E38]";
+        default:
+          return "border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white";
+      }
+    };
+
+    const isDisabled = row.status && ["Delivered", "Cancelled"].includes(row.status);
+    const statusStyles = getStatusStyles(row.status);
+
+    return (
+      <button
+        className={`px-4 py-1 rounded-lg font-medium text-sm transition border ${
+          row.status 
+            ? statusStyles
+            : "border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
+        } ${isDisabled ? "cursor-default" : ""}`}
+        disabled={isDisabled}
+        onClick={() => openModal("isViewStatus", row._id, row.status)}
+      >
+        {row.status ? row.status : "Set"}
+      </button>
+    );
+  },
+},
     {
       header: "Actions",
       cell: (row, rowIndex) => (

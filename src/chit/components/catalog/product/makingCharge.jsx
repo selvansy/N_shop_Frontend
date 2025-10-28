@@ -9,21 +9,31 @@ export default function MakingChargesForm({ onChange, initialState }) {
 
   const [formData, setFormData] = useState({}); 
  
-  const handleInputChange = (field, value) => {
-    setFormData((prev) => {
-      const updatedFormData = { ...prev, [field]: value };
+  // const handleInputChange = (field, value) => {
+  //   setFormData((prev) => {
+  //     const updatedFormData = { ...prev, [field]: value };
 
-      if (
-        updatedFormData.actualValue &&
-        updatedFormData.discountedValue &&
-        updatedFormData.discountedPercentage
-      ) {
-        onChange(updatedFormData);
-      }
+  //     if (
+  //       updatedFormData.actualValue &&
+  //       updatedFormData.discountedValue &&
+  //       updatedFormData.discountedPercentage
+  //     ) {
+  //       onChange(updatedFormData);
+  //     }
 
-      return updatedFormData;
-    });
-  };
+  //     return updatedFormData;
+  //   });
+  // };
+
+    const handleInputChange = (field, value) => {
+  setFormData((prev) => {
+    const updatedFormData = { ...prev, [field]: value };
+    
+    onChange(updatedFormData);
+
+    return updatedFormData;
+  });
+};
 
   
   useEffect(()=>{
@@ -42,6 +52,10 @@ export default function MakingChargesForm({ onChange, initialState }) {
       ).toFixed(2);
       handleInputChange("discountedPercentage", percentage);
     }
+    else {
+    handleInputChange("discountedPercentage", ""); 
+    handleInputChange("discountedValue","")
+  }
   };
 
   const handleDiscountedChange = (e) => {
@@ -60,10 +74,11 @@ export default function MakingChargesForm({ onChange, initialState }) {
       handleInputChange("discountedPercentage", percentage);
     } else {
       handleInputChange("discountedPercentage", "");
+      handleInputChange("discountedValue","")
     }
   };
 
-  const handlediscountedPercentageChange = (e) => {
+  const   handlediscountedPercentageChange = (e) => {
     let value = e.target.value.replace(/[^0-9]/g, "").slice(0, 2);
     handleInputChange("discountedPercentage", value);
 
@@ -83,6 +98,17 @@ export default function MakingChargesForm({ onChange, initialState }) {
     { label: "Weight", value: "weight" },
   ];
 
+  const modeMap = {
+  1: "amount",
+  2: "weight",
+};
+
+const reverseModeMap = {
+  amount: 1,
+  weight: 2,
+};
+
+
   const unit = formData.mode === "amount" ? "INR" : "gms";
   
   return (
@@ -101,9 +127,18 @@ export default function MakingChargesForm({ onChange, initialState }) {
             <Select
               styles={customStyles(true)}
               options={options}
-              value={options.find((option) => option.value === formData.mode)}
+              // value={options.find((option) => option.value === formData.mode)}
+              // onChange={(selectedOption) =>
+              //   setFormData((prev) => ({ ...prev, mode: selectedOption.value }))
+              // }
+                value={options.find(
+                (option) => option.value === modeMap[formData.mode] 
+              )}
               onChange={(selectedOption) =>
-                setFormData((prev) => ({ ...prev, mode: selectedOption.value }))
+                setFormData((prev) => ({
+                  ...prev,
+                  mode: reverseModeMap[selectedOption.value],
+                }))
               }
             />
           </div>
@@ -125,6 +160,7 @@ export default function MakingChargesForm({ onChange, initialState }) {
             <input
               type="number"
               value={formData.actualValue}
+              disabled={!formData.mode}
               onChange={handleActualValueChange}
               className="w-full focus:outline-none pl-2 pr-3 h-full"
               placeholder="Actual Value"
@@ -142,6 +178,7 @@ export default function MakingChargesForm({ onChange, initialState }) {
             <input
               type="number"
               value={formData.discountedPercentage}
+              disabled={!formData.actualValue}
               onChange={handlediscountedPercentageChange}
               className="border-2 border-[#F2F2F9] rounded-md pr-14 pl-3 w-full focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent h-full"
               placeholder="Discount Percentage"
@@ -169,6 +206,7 @@ export default function MakingChargesForm({ onChange, initialState }) {
             <input
               type="number"
               value={formData.discountedValue}
+              disabled={!formData.discountedPercentage}
               onChange={handleDiscountedChange}
               className="w-full focus:outline-none ml-2 "
               placeholder="Actual Value"

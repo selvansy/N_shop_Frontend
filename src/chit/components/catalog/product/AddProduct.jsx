@@ -98,7 +98,7 @@ const AddProduct = () => {
       values: [],
     },
     makingCharges: {
-      mode: "amount",
+      mode: "",
       actualValue: "",
       discountedValue: "",
       discountedPercentage: "",
@@ -106,7 +106,7 @@ const AddProduct = () => {
       mcView: false,
     },
     wastageCharges: {
-      mode: "amount",
+      mode: "",
       actualValue: "",
       discountedValue: "",
       discountedPercentage: "",
@@ -1177,7 +1177,7 @@ useEffect(() => {
               <label className="text-gray-700 mb-2 font-medium">
                 Upload Image<span className="text-red-400">*</span>{" "}
                 <span className="text-sm font-normal">
-                  (File size must be at least 500KB)
+                  (File size must be at least 500KB & Max 3 Images)
                 </span>
               </label>
 

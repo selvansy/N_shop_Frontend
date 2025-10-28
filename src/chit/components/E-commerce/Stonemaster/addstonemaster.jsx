@@ -51,8 +51,6 @@ const Addstonemaster = ({setIsOpen, id ,clearId}) => {
     description:"",
   });
 
-  console.log("erty",formData)
-
 
    const handleClearImage = () => {
     if (imagePreviews.image?.previewUrl) {
@@ -436,7 +434,7 @@ const handleSubmit =()=>{
 
              <div className="flex flex-col mt-2">
               <label className="text-gray-700 mb-2 font-medium">
-              Per Crate Rate
+              Per Carat Rate
               </label>
               <input
                 name="percraterate"

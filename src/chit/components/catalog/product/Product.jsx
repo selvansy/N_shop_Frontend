@@ -44,7 +44,6 @@ const Product = () => {
   const [totalDocuments, setTotalDocuments] = useState(0);
   const [activeFilter, setActiveFilter] = useState(null);
 
-  console.log("wertyuiop",productData)
   //mutation to get getproductData
   const { mutate: getproductData } = useMutation({
     mutationFn: (payload) => getproductTable(payload),
@@ -185,10 +184,34 @@ const Product = () => {
         return row.purityName;
       },
     },
-    {
-      header: "Weight",
-      cell: (row) => row?.weight,
-    },
+    // {
+    //   header: "Stock",
+    //   cell: (row) => row?.weight,
+    // },
+{
+  header: "Stock",
+  cell: (row) => {
+    const weight = row?.weight || 0;
+    let boxStyle = "";
+    
+    if (weight <= 5) {
+      boxStyle = "bg-[#FF000038] text-[#ff3636]";
+      } else if (weight > 5 && weight <= 20) {
+      boxStyle = "bg-[#FDA70038] text-[#FDA700]";
+      
+    } else {
+      boxStyle = "bg-[#12B76A38] text-[#12B76A]";
+         }
+    
+    return (
+      <div className="relative group">
+        <span className={`inline-flex items-center justify-center min-w-12 px-3 py-1.5 rounded-lg font-bold cursor-help ${boxStyle}`}>
+          {weight}
+        </span>
+      </div>
+    );
+  },
+},
     
     {
       header: "Image",
@@ -236,7 +259,6 @@ const Product = () => {
       accessor: "bestSeller",
       cell: (row) => (
         <label className="relative inline-flex items-center cursor-pointer">
-          <div>{console.log(row,"kdkd")}</div>
           <input
             type="checkbox"
             className="sr-only peer"

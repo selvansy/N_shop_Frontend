@@ -9,21 +9,32 @@ export default function WastageChargeForm({ onChange,initialState }) {
 
   const [formData, setFormData] = useState({}); 
 
-  const handleInputChange = (field, value) => {
-    setFormData((prev) => {
-      const updatedFormData = { ...prev, [field]: value };
+  // const handleInputChange = (field, value) => {
+  //   setFormData((prev) => {
+  //     const updatedFormData = { ...prev, [field]: value };
       
-      if (
-        updatedFormData.actualValue &&
-        updatedFormData.discountedValue &&
-        updatedFormData.discountedPercentage
-      ) {
-        onChange(updatedFormData);
-      }
+  //     if (
+  //       updatedFormData.actualValue &&
+  //       updatedFormData.discountedValue &&
+  //       updatedFormData.discountedPercentage
+  //     ) {
+  //       onChange(updatedFormData);
+  //     }
 
-      return updatedFormData;
-    });
-  };
+  //     return updatedFormData;
+  //   });
+  // };
+
+    const handleInputChange = (field, value) => {
+  setFormData((prev) => {
+    const updatedFormData = { ...prev, [field]: value };
+    
+   
+    onChange(updatedFormData);
+
+    return updatedFormData;
+  });
+};
 
    useEffect(()=>{
       if(!initialState) return
@@ -38,6 +49,9 @@ export default function WastageChargeForm({ onChange,initialState }) {
       const percentage = (((Number(value) - Number(formData.discountedValue)) / Number(value)) * 100).toFixed(2);
       handleInputChange("discountedPercentage", percentage);
     }
+     else {
+    handleInputChange("discountedPercentage", ""); 
+  }
   };
 
   const handleDiscountedChange = (e) => {
@@ -51,6 +65,7 @@ export default function WastageChargeForm({ onChange,initialState }) {
       handleInputChange("discountedPercentage", percentage);
     } else {
       handleInputChange("discountedPercentage", "");
+        handleInputChange("discountedValue","")
     }
   };
 
@@ -73,6 +88,17 @@ export default function WastageChargeForm({ onChange,initialState }) {
 
   const unit = formData.mode === "amount" ? " ₹" : "g";
 
+const modeMap = {
+  1: "amount",
+  2: "weight",
+};
+
+const reverseModeMap = {
+  amount: 1,
+  weight: 2,
+};
+
+
   return (
     <div >
       <h2 className="text-xl text-[#023453] font-bold justify-between mb-3">Wastage</h2>
@@ -87,9 +113,18 @@ export default function WastageChargeForm({ onChange,initialState }) {
             <Select
               styles={customStyles(true)}
               options={options}
-              value={options.find((option) => option.value === formData.mode)}
+              // value={options.find((option) => option.value === formData.mode)}
+              // onChange={(selectedOption) =>
+              //   setFormData((prev) => ({ ...prev, mode: selectedOption.value }))
+              // }
+              value={options.find(
+                (option) => option.value === modeMap[formData.mode] 
+              )}
               onChange={(selectedOption) =>
-                setFormData((prev) => ({ ...prev, mode: selectedOption.value }))
+                setFormData((prev) => ({
+                  ...prev,
+                  mode: reverseModeMap[selectedOption.value],
+                }))
               }
             />
           </div>
@@ -113,6 +148,7 @@ export default function WastageChargeForm({ onChange,initialState }) {
             <input
               type="number"
               value={formData.actualValue}
+              disabled={!formData.mode}
               onChange={handleActualValueChange}
               className="w-full focus:outline-none pl-2 pr-3 h-full"
               placeholder="Actual Value"
@@ -137,6 +173,7 @@ export default function WastageChargeForm({ onChange,initialState }) {
             <input
               type="number"
               value={formData.discountedPercentage}
+              disabled={!formData.actualValue}
               onChange={handlediscountedPercentageChange}
               className="border-2 border-[#F2F2F9] rounded-md pr-14 pl-3 w-full focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent h-full"
               placeholder="Discount Percentage"
@@ -168,6 +205,7 @@ export default function WastageChargeForm({ onChange,initialState }) {
               type="number"
               value={formData.discountedValue}
               onChange={handleDiscountedChange}
+              disabled={!formData.discountedPercentage}
               className="w-full focus:outline-none ml-2 "
               placeholder="Actual Value"
               onKeyDown={(e) => e.key === "e" && e.preventDefault()}
@@ -182,7 +220,7 @@ export default function WastageChargeForm({ onChange,initialState }) {
           </div>
         </div>
 
-        <div className="flex items-center  gap-6 mt-6 mb-2 w-full">
+        {/* <div className="flex items-center  gap-6 mt-6 mb-2 w-full">
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
@@ -223,7 +261,7 @@ export default function WastageChargeForm({ onChange,initialState }) {
             />
             <div
               className={`w-[16px] h-[16px] border-2 rounded-sm flex items-center justify-center ${
-                formData.wastageView
+                formData.mcView
                   ? "bg-[#004181] border-[#004181]"
                   : "border-gray-400"
               }`}
@@ -242,7 +280,66 @@ export default function WastageChargeForm({ onChange,initialState }) {
             </div>
             <span> Wastage View</span>
           </label>
+        </div> */}
+        <div className="flex items-center gap-6 mt-6 mb-2 w-full">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={formData.discountView}
+              onChange={() => handleInputChange("discountView", !formData.discountView)}
+              className="hidden"
+              id="discountView"
+            />
+            <div
+              className={`w-[16px] h-[16px] border-2 rounded-sm flex items-center justify-center ${formData.discountView
+                  ? "bg-[#004181] border-[#004181]"
+                  : "border-gray-400"
+                }`}
+            >
+              {formData.discountView && (
+                <svg
+                  className="text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M5 13l4 4L19 7" />
+                </svg>
+              )}
+            </div>
+            <span>Discount View</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={formData.wastageView}
+              onChange={() => handleInputChange("wastageView", !formData.wastageView)}
+              className="hidden"
+              id="wastageView"
+            />
+            <div
+              className={`w-[16px] h-[16px] border-2 rounded-sm flex items-center justify-center ${formData.wastageView
+                  ? "bg-[#004181] border-[#004181]"
+                  : "border-gray-400"
+                }`}
+            >
+              {formData.wastageView && (
+                <svg
+                  className="text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M5 13l4 4L19 7" />
+                </svg>
+              )}
+            </div>
+            <span>Wastage View</span>
+          </label>
         </div>
+
       </div>
 
       
