@@ -715,6 +715,15 @@ const Base = ({ renderContent: RenderContent }) => {
               handleClick("Dashboard");
             }}
           />
+           <MenuItem
+            text="Ecom Dashboard"
+            hasSubmenu={false}
+            onClick={() => {
+              setSelectedSection("EcomDashboard");
+              setSelectedParentSection("EcomDashboard");
+              handleClick("EcomDashboard");
+            }}
+          />
           {isSuperAdmin
             ? superData.map((menu, index) => (
                 <MenuItem
