@@ -5,7 +5,7 @@ import { getorderstatus, changeorderstatus } from "../../../api/Endpoints";
 import { toast } from "sonner";
 import { useSelector } from "react-redux";
 import SpinLoading from "../../common/spinLoading";
-
+import Select from "react-select";
 const OrderStatus = ({ setIsOpen, id, clearId, currentStatus }) => {
   const layout_color = useSelector((state) => state.clientForm.layoutColor);
   const [isLoading, setIsLoading] = useState(false);
@@ -18,6 +18,68 @@ const OrderStatus = ({ setIsOpen, id, clearId, currentStatus }) => {
     statusId: "",
     remarks: "",
   });
+
+  const customStyles = (isReadOnly) => ({
+    control: (base, state) => ({
+      ...base,
+      minHeight: "42px", //42px
+      backgroundColor: "white",
+      color: "#232323",
+      // fontWeight:600,
+      border: state.isFocused ? "1px solid #f2f2f9" : "1px solid #f2f2f9",
+      boxShadow: state.isFocused ? "0 0 0 1px #004181" : "none",
+      borderRadius: "0.5rem",
+      "&:hover": {
+        color: "#e2e8f0",
+      },
+      pointerEvents: !isReadOnly ? "none" : "auto",
+      opacity: !isReadOnly ? 1 : 1,
+      cursor: isReadOnly ? "pointer" : "default",
+    }),
+    indicatorSeparator: () => ({
+      display: "none",
+    }),
+    placeholder: (base) => ({
+      ...base,
+      color: "#6C7086",
+      // fontWeight: "thin",
+      fontSize: "14px",
+      // fontStyle: "bold",
+    }),
+    dropdownIndicator: (provided, state) => ({
+      ...provided,
+      color: "#232323",
+      fontSize: "14px",
+      "&:hover": {
+        color: "#232323",
+      },
+    }),
+    menuList: (provided) => ({
+      ...provided,
+      // paddingTop: 0,
+      // paddingBottom: 0,
+      maxHeight:   "190px",
+      // maxHeight: [2, 5, 6].includes(formik.values.scheme_type)
+      //   ? "130px"
+      //   : "209px",
+    }),
+    input: (base) => ({
+      ...base,
+      "input[type='text']:focus": { boxShadow: "none" },
+    }),
+    option: (base, state) => ({
+      ...base,
+      backgroundColor: state.isSelected
+        ? "#F0F7FE"
+        : state.isFocused
+        ? "#F0F7FE"
+        : "white",
+      color: "#232323",
+      fontWeight: "500",
+      fontSize: "14px",
+    }),
+  });
+
 console.log(currentStatus)
   useEffect(() => {
     const fetchStatuses = async () => {
@@ -94,7 +156,7 @@ console.log(currentStatus)
               Status<span className="text-red-400">*</span>
             </label>
             <div className="relative">
-              <select
+              {/* <select
                 name="statusId"
                 value={formData.statusId}
                 onChange={handleInputChange}
@@ -106,20 +168,47 @@ console.log(currentStatus)
                     {status.name}
                   </option>
                 ))}
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+              </select> */}
+              {/* <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
                 <svg
-                  className="h-4 w-4 text-gray-400"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="3"
-                  viewBox="0 0 24 24"
-                  stroke="black"
+                className="h-4 w-4 text-gray-400"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="3"
+                viewBox="0 0 24 24"
+                stroke="black"
                 >
-                  <path d="M19 9l-7 7-7-7"></path>
+                <path d="M19 9l-7 7-7-7"></path>
                 </svg>
-              </div>
+                </div> */}
+
+
+                <div className="relative">
+                  <Select
+                    styles={customStyles(true)}
+                    isClearable={true}
+                    placeholder="Select Status"
+                    options={filteredStatuses?.map((status) => ({
+                      value: status._id,
+                      label: status.name,
+                    }))}
+                    value={
+                      filteredStatuses
+                        ?.map((status) => ({
+                          value: status._id,
+                          label: status.name,
+                        }))
+                        .find((option) => option.value === formData.statusId) || null
+                    }
+                    onChange={(option) => {
+                      setFormData({
+                        ...formData,
+                        statusId: option ? option.value : "", 
+                      });
+                    }}
+                  />
+                </div>
             </div>
             {formErrors.statusId && (
               <span className="text-red-500 text-sm mt-1">

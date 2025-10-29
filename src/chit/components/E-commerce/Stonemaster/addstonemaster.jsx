@@ -51,6 +51,8 @@ const Addstonemaster = ({setIsOpen, id ,clearId}) => {
     description:"",
   });
 
+  console.log("erty",formData)
+
 
    const handleClearImage = () => {
     if (imagePreviews.image?.previewUrl) {

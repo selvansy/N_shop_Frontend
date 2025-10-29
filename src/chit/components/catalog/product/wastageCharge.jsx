@@ -51,6 +51,7 @@ export default function WastageChargeForm({ onChange,initialState }) {
     }
      else {
     handleInputChange("discountedPercentage", ""); 
+      handleInputChange("discountedValue","")
   }
   };
 
@@ -86,7 +87,7 @@ export default function WastageChargeForm({ onChange,initialState }) {
     { label: "Weight", value: "weight" },
   ];
 
-  const unit = formData.mode === "amount" ? " ₹" : "g";
+  const unit = formData.mode === 1 ? " ₹" : "g";
 
 const modeMap = {
   1: "amount",
@@ -97,6 +98,8 @@ const reverseModeMap = {
   amount: 1,
   weight: 2,
 };
+
+console.log("wertyu",formData.mode)
 
 
   return (
@@ -138,13 +141,18 @@ const reverseModeMap = {
             Actual Value 
           </label>
           <div className="flex items-center border-2 border-[#F2F2F9] rounded-md h-[44px]">
-          {formData.mode=="amount"&&(
+             <div className="h-full border-e-2 border-[#DEDEDE] flex items-center">
+              <span className="px-4 flex items-center justify-center h-full">
+                ₹
+              </span>
+              </div>
+          {/* {formData.mode=== 1 &&(
                <div className="h-[44px] border-e-2 border-[#DEDEDE] flex items-center">
                <span className="px-[14px] flex items-center justify-center h-full">
                  {unit}
                </span>
              </div>
-            )}
+            )} */}
             <input
               type="number"
               value={formData.actualValue}
@@ -154,13 +162,13 @@ const reverseModeMap = {
               placeholder="Actual Value"
               onKeyDown={(e) => e.key === "e" && e.preventDefault()}
             />
-             {formData.mode=="weight"&&(
+             {/* {formData.mode === 2 &&(
                <div className="h-[44px] border-s-2 border-[#DEDEDE] flex items-center">
                <span className="px-[14px] flex items-center justify-center h-full">
                  {unit}
                </span>
              </div>
-            )}
+            )} */}
           </div>
         </div>
 
@@ -193,14 +201,19 @@ const reverseModeMap = {
             Discounted Value
           </label>
           <div className="flex items-center border-2 border-[#F2F2F9] rounded-[8px] h-[44px] ">
-            {formData.mode=="amount"&&(
+            {/* {formData.mode== 1 &&(
                <div className="h-[44px] border-e-2 border-[#DEDEDE] flex items-center">
                <span className="px-[14px] flex items-center justify-center h-full">
                  {unit}
                </span>
              </div>
-            )}
+            )} */}
 
+            <div className="h-full border-e-2 border-[#DEDEDE] flex items-center">
+              <span className="px-4 flex items-center justify-center h-full">
+                ₹
+              </span>
+            </div>
             <input
               type="number"
               value={formData.discountedValue}
@@ -210,13 +223,13 @@ const reverseModeMap = {
               placeholder="Actual Value"
               onKeyDown={(e) => e.key === "e" && e.preventDefault()}
             />
-            {formData.mode=="weight"&&(
+            {/* {formData.mode== 2 &&(
                <div className="h-[44px] border-s-2 border-[#DEDEDE] flex items-center">
                <span className="px-[14px] flex items-center justify-center h-full">
                  {unit}
                </span>
              </div>
-            )}
+            )} */}
           </div>
         </div>
 

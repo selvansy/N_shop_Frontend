@@ -610,20 +610,19 @@ function Orderlist() {
     const statusStyles = getStatusStyles(row.status);
 
     return (
-      <button
-        className={`px-4 py-1 rounded-lg font-medium text-sm transition border ${
-          row.status 
-            ? statusStyles
-            : "border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
-        } ${isDisabled ? "cursor-default" : ""}`}
-        disabled={isDisabled}
-        onClick={() => openModal("isViewStatus", row._id, row.status)}
-      >
-        {row.status ? row.status : "Set"}
-      </button>
-    );
-  },
-},
+          <button
+            className={`px-4 py-1 rounded-lg font-medium text-sm transition border ${row.status
+                ? statusStyles
+                : "border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
+              } ${isDisabled ? "cursor-default" : ""}`}
+            disabled={isDisabled}
+            onClick={() => openModal("isViewStatus", row._id, row.status)}
+          >
+            {row.status ? row.status : "Set"}
+          </button>
+        );
+      },
+    },
     {
       header: "Actions",
       cell: (row, rowIndex) => (
@@ -706,7 +705,8 @@ function Orderlist() {
         <ModelOne
           title="Request Shipment"
           extraClassName="w-[400px]"
-          setIsOpen={() => openModal("isViewOpenReq")}
+          // setIsOpen={() => openModal("isViewOpenReq")}
+           setIsOpen={() => setModalState(prev => ({...prev, isViewStatus: false}))}
           isOpen={modalState.isViewOpenReq}
           closeModal={closeModal}
         >
@@ -719,7 +719,8 @@ function Orderlist() {
         <ModelOne
           title="Status"
           extraClassName="w-[400px]"
-          setIsOpen={() => openModal("isViewStatus")}
+          // setIsOpen={() => openModal("isViewStatus")}
+           setIsOpen={() => setModalState(prev => ({...prev, isViewStatus: false}))}
           isOpen={modalState.isViewStatus}
           closeModal={closeModal}
         >

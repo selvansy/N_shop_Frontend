@@ -66,7 +66,6 @@ const Sizemaster = () => {
   const [isviewOpen, setIsviewOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState(null);
 
-  console.log("qwertyuio",Sizemasterdata)
   
   function closeIncommingModal() {
     setIsviewOpen(false);
@@ -138,8 +137,16 @@ const Sizemaster = () => {
   const { mutate: deletesizemaster } = useMutation({
        mutationFn: (id ) => Deletesizemaster(id),
        onSuccess: (response) => {
-         toast.success(response.message);
+         toast.success("Size Master Deleted Successfully");
          eventEmitter.off("CONFIRMATION_SUBMIT");
+          getSizemaster({
+          search: debouncedSearch,
+          page: currentPage,
+          limit: itemsPerPage,
+          from_date,
+          to_date,
+          active: activeFilter ?? ""
+        });
        },
        onError: (error) => {
          console.error("Error fetching countries:", error);

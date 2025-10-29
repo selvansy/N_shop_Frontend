@@ -98,7 +98,7 @@ const AddProduct = () => {
       values: [],
     },
     makingCharges: {
-      mode: "",
+      mode: "amount",
       actualValue: "",
       discountedValue: "",
       discountedPercentage: "",
@@ -106,7 +106,7 @@ const AddProduct = () => {
       mcView: false,
     },
     wastageCharges: {
-      mode: "",
+      mode: "amount",
       actualValue: "",
       discountedValue: "",
       discountedPercentage: "",
@@ -578,10 +578,15 @@ useEffect(() => {
       return;
     }
 
+    const fieldsToUppercase=["code","sku"];
+     const processedValue = fieldsToUppercase.includes(name) 
+      ? value.toUpperCase() 
+      : value;
+
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
-    }));
+      [name]: processedValue,
+    }));  
   };
 
   const handleImageChange = (e) => {
@@ -1145,33 +1150,33 @@ useEffect(() => {
               </div>
             </div>
             <div className="flex flex-col mt-2 ">
-  <label className="text-gray-700 mb-2 font-medium">
-    Collection
-  </label>
-  <div className="flex items-center gap-6 mt-4 w-full flex-wrap">
-    {collection.map((option, index) => (
-      <label key={index} className="flex items-center gap-2 whitespace-nowrap">
-        <input
-          className="w-4 h-4"
-          onChange={(e) => {
-            const isChecked = e.target.checked;
-            setFormData((prev) => ({
-              ...prev,
-              collection: isChecked
-                ? [...prev.collection, option.value]
-                : prev.collection.filter((id) => id !== option.value)
-            }));
-          }}
-          name="collection"
-          checked={formData.collection?.includes(option.value)}
-          type="checkbox"
-          value={option.value}
-        />
-        {option.label}
-      </label>
-    ))}
-  </div>
-</div>
+              <label className="text-gray-700 mb-2 font-medium">
+                Collection
+              </label>
+              <div className="flex items-center gap-6 mt-4 w-full flex-wrap">
+                {collection.map((option, index) => (
+                  <label key={index} className="flex items-center gap-2 whitespace-nowrap">
+                    <input
+                      className="w-4 h-4"
+                      onChange={(e) => {
+                        const isChecked = e.target.checked;
+                        setFormData((prev) => ({
+                          ...prev,
+                          collection: isChecked
+                            ? [...prev.collection, option.value]
+                            : prev.collection.filter((id) => id !== option.value)
+                        }));
+                      }}
+                      name="collection"
+                      checked={formData.collection?.includes(option.value)}
+                      type="checkbox"
+                      value={option.value}
+                    />
+                    {option.label}
+                  </label>
+                ))}
+              </div>
+            </div>
 
             <div className="flex flex-col mt-2 w-full">
               <label className="text-gray-700 mb-2 font-medium">

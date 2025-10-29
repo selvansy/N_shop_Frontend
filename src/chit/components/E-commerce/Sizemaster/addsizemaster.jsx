@@ -67,7 +67,7 @@ const navigate=useNavigate();
   const { mutate: createcategoryMutate } = useMutation({
     mutationFn: createsizemaster,
     onSuccess: () => {
-       toast.success(response.message);
+      //  toast.success(response.message);
     navigate('/sizemaster/sizemaster');
     // toast.success("Size Master created successfully");   
     setIsLoading(false);
