@@ -60,6 +60,7 @@ const AddProduct = () => {
   const [availableSizes, setAvailableSizes] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const[Ids,setIds]=useState([])
+  const [dragIndex, setDragIndex] = useState(null);
 
   const handleaddmetal = () => {
     setIsviewOpen(true);
@@ -861,6 +862,56 @@ useEffect(() => {
     }));
   }, [formData.netWeight, formData.stonewt, formData.diamondwt]); 
 
+
+
+// const handleDragStart = (index) => {
+//   setDragIndex(index);
+// };
+
+// const handleDrop = (index) => {
+//   const updatedImages = [...imagePreviews];
+//   const draggedItem = updatedImages[dragIndex];
+
+//   updatedImages.splice(dragIndex, 1);
+//   updatedImages.splice(index, 0, draggedItem);
+
+//   setImagePreviews(updatedImages);
+//   setDragIndex(null);
+// };
+
+// const allowDrop = (e) => {
+//   e.preventDefault();
+// };
+
+const handleDragStart = (index) => {
+  setDragIndex(index);
+};
+
+const handleDrop = (index) => {
+  
+  const updatedPreviews = [...imagePreviews];
+  const updatedImages = [...product_image];
+  
+  const draggedPreview = updatedPreviews[dragIndex];
+  const draggedImage = updatedImages[dragIndex];
+
+  updatedPreviews.splice(dragIndex, 1);
+  updatedImages.splice(dragIndex, 1);
+  
+ 
+  updatedPreviews.splice(index, 0, draggedPreview);
+  updatedImages.splice(index, 0, draggedImage);
+
+  setImagePreviews(updatedPreviews);
+  setproductImgPath(updatedImages);
+  setDragIndex(null);
+};
+
+const allowDrop = (e) => {
+  e.preventDefault();
+};
+
+
   return (
     <>
       <Breadcrumb
@@ -1221,7 +1272,15 @@ useEffect(() => {
                       <div
                         key={index}
                         className="w-16 h-16 border border-[#F2F2F9] rounded-md overflow-hidden relative shrink-0"
+                        draggable
+                        onDragStart={() => handleDragStart(index)}
+                        onDragOver={allowDrop}
+                        onDrop={() => handleDrop(index)}
                       >
+
+                        <span className="absolute top-1 left-1 bg-black bg-opacity-70 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full z-10">
+                          {index + 1}
+                        </span>
                         <button
                           onClick={() => handleRemoveImage(index)}
                           className="absolute top-1 right-1 w-4 h-4 flex items-center justify-center bg-red-500 text-white text-xs rounded-full hover:bg-red-600 z-10"
